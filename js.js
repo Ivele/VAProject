@@ -11,7 +11,7 @@ async function sendMessage() {
                 body: JSON.stringify({ text: message })
             });
             console.log(JSON.stringify({ text: message }));
-            console.log(response);
+            
             let data = await response.json();
             appendMessage("Бот: " + data.response);
         }
