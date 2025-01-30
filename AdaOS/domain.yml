@@ -1,0 +1,53 @@
+version: "3.1"
+
+entities:
+  - location
+
+forms:
+  search_form:
+    required_slots:
+      - search_query
+
+slots:
+  search_query:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: search_form
+            requested_slot: search_query
+
+  last_entity_value:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: location
+
+  last_entity_name:
+    type: text
+    mappings:
+    - type: from_intent
+      value: location
+      intent: ask_weather
+
+intents:
+  - ask_time
+  - ask_weather
+  - ask_GPT
+  - GPT_question
+
+actions:
+  - action_show_time
+  - action_get_weather
+  - action_save_example_to_intent
+  - action_ask_GPT
+
+responses:
+  utter_ask_GPT:
+  - text: "Какой вопрос вас интерисует?"
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

@@ -1,0 +1,30 @@
+{
+  "lookup": {
+    "rules": {
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"uber_greet\"}}]": "action_save_example_to_intent",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"uber_greet\"}}, {\"prev_action\": {\"action_name\": \"action_save_example_to_intent\"}, \"user\": {\"intent\": \"uber_greet\"}}]": "utter_greet",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"uber_greet\"}}, {\"prev_action\": {\"action_name\": \"action_save_example_to_intent\"}, \"user\": {\"intent\": \"uber_greet\"}}, {\"prev_action\": {\"action_name\": \"utter_greet\"}, \"user\": {\"intent\": \"uber_greet\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"ask_weather\"}}]": "action_save_example_to_intent_with_entity",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"ask_weather\"}}, {\"prev_action\": {\"action_name\": \"action_save_example_to_intent_with_entity\"}, \"user\": {\"intent\": \"ask_weather\"}}]": "action_listen",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"ask_time\"}}]": "action_save_example_to_intent",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"ask_time\"}}, {\"prev_action\": {\"action_name\": \"action_save_example_to_intent\"}, \"user\": {\"intent\": \"ask_time\"}}]": "action_show_time",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"ask_time\"}}, {\"prev_action\": {\"action_name\": \"action_save_example_to_intent\"}, \"user\": {\"intent\": \"ask_time\"}}, {\"prev_action\": {\"action_name\": \"action_show_time\"}, \"user\": {\"intent\": \"ask_time\"}}]": "action_listen"
+    },
+    "rule_only_slots": [],
+    "rule_only_loops": [],
+    "rules_for_loop_unhappy_path": {},
+    "rules_not_in_stories": [
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"ask_weather\"}}, {\"prev_action\": {\"action_name\": \"action_save_example_to_intent_with_entity\"}, \"user\": {\"intent\": \"ask_weather\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"ask_time\"}}, {\"prev_action\": {\"action_name\": \"action_save_example_to_intent\"}, \"user\": {\"intent\": \"ask_time\"}}, {\"prev_action\": {\"action_name\": \"action_show_time\"}, \"user\": {\"intent\": \"ask_time\"}}]",
+      "predicting default action with intent session_start",
+      "predicting default action with intent restart",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"ask_time\"}}, {\"prev_action\": {\"action_name\": \"action_save_example_to_intent\"}, \"user\": {\"intent\": \"ask_time\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"uber_greet\"}}, {\"prev_action\": {\"action_name\": \"action_save_example_to_intent\"}, \"user\": {\"intent\": \"uber_greet\"}}, {\"prev_action\": {\"action_name\": \"utter_greet\"}, \"user\": {\"intent\": \"uber_greet\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"uber_greet\"}}, {\"prev_action\": {\"action_name\": \"action_save_example_to_intent\"}, \"user\": {\"intent\": \"uber_greet\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"ask_weather\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"uber_greet\"}}]",
+      "[{\"prev_action\": {\"action_name\": \"action_listen\"}, \"user\": {\"intent\": \"ask_time\"}}]",
+      "predicting default action with intent back"
+    ]
+  }
+}

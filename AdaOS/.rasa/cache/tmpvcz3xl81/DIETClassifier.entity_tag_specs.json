@@ -1,0 +1,28 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-None",
+      "2": "I-None",
+      "3": "L-None",
+      "4": "U-None",
+      "5": "B-location",
+      "6": "I-location",
+      "7": "L-location",
+      "8": "U-location",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-None": 1,
+      "I-None": 2,
+      "L-None": 3,
+      "U-None": 4,
+      "B-location": 5,
+      "I-location": 6,
+      "L-location": 7,
+      "U-location": 8,
+      "O": 0
+    },
+    "num_tags": 9
+  }
+]

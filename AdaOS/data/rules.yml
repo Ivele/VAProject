@@ -1,0 +1,37 @@
+version: "3.1"
+
+rules:
+
+- rule: Ответ на запрос погоды
+  steps:
+    - intent: ask_weather
+    - action: action_get_weather
+    - action: action_save_example_to_intent
+
+- rule: Ответ на запрос времени
+  steps:
+    - intent: ask_time
+    - action: action_show_time
+    - action: action_save_example_to_intent
+
+- rule: Привет
+  steps:
+    - intent: uber_greet
+    - action: action_save_example_to_intent
+
+- rule: Вопрос ГПТ
+  steps:
+    - intent: ask_GPT
+    - action: utter_ask_GPT
+    - action: search_form
+    - active_loop: search_form
+
+- rule: Подтверждение формы
+  condition:
+    - active_loop: search_form
+  steps:
+    - action: search_form
+    - active_loop: null
+    - slot_was_set:
+      - requested_slot: null
+    - action: action_ask_GPT

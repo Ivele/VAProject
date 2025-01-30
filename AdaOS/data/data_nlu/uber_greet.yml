@@ -1,0 +1,25 @@
+version: "3.1"
+
+
+nlu:
+- intent: uber_greet
+  examples: |
+    - Сдарова, педик
+    - Садfарова, заебал
+    - Садарова, заебал
+    - Сдарова, заебал
+    - А ну ка дай время23232
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+    - [Пиво](None)
