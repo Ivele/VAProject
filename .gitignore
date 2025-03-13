@@ -1,3 +1,4 @@
 venv/
 .vscode/
 actions/__pycache__/
+/AdaOS/actions/__pycache__
