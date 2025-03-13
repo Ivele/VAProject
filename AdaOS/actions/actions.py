@@ -13,19 +13,19 @@ class ActionAskGPT(Action):
         return "action_ask_GPT"
     
     def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: dict):
-
+        
         ask = tracker.get_slot("search_query")
 
         client = OpenAI(
             base_url="https://models.inference.ai.azure.com",
-            api_key= "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"
+            api_key= ""
     )
         
         response =  client.chat.completions.create(
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a helpful assistant. Please, provide response in JSON. Store answer in dictionary 'answer. In this dictionary must be 2 keys: 'question' and 'response'. Response must be string",
+                    "content": "You are a helpful assistant. Please, provide response in JSON. Store answer in dictionary 'answer'. In this dictionary must be 2 keys: 'question' and 'response'. Response must be string",
                 },
                 {
                     "role": "user",

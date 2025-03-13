@@ -4,11 +4,6 @@ version: "3.1"
 nlu:
 - intent: uber_greet
   examples: |
-    - Сдарова, педик
-    - Садfарова, заебал
-    - Садарова, заебал
-    - Сдарова, заебал
-    - А ну ка дай время23232
     - hey
     - hello
     - hi
@@ -23,3 +18,12 @@ nlu:
     - goodevening
     - good afternoon
     - [Пиво](None)
+    - response
+    - 123
+    - dsddddddddddddd
+    - ddddddddddddddddddddddddddddddddddddddddddddddddddddd
+    - ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    - dssd
+    - dsds
+    - 111111111111111111111111111111
+    - 1111111111111111111111111111111111111111111111111111111111111
