@@ -8,6 +8,7 @@ import queue
 import os
 from PIL import Image
 import threading
+import subprocess
 
 #----------------------------Отдел Окна----------------------------#
 
@@ -15,7 +16,7 @@ class ChatApp(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.text_target_url = "http://localhost:5005/webhooks/callback/webhook"
+        self.text_target_url = "http://localhost:5005/webhooks/rest/webhook"
         self.audio_target_url = ""
 
         self.title("Rasa Chat App")
@@ -39,6 +40,7 @@ class ChatApp(ctk.CTk):
         
         self.entry_text = ctk.CTkEntry(self.input_frame, fg_color= "transparent", border_width = 0, placeholder_text="Введите сообщение...")
         self.entry_text.pack(side = "left", fill = "x", expand = True, padx = 5, pady = 5)
+        self.entry_text.bind("<Return>", self.send_message)
 
         self.send_icon = ctk.CTkImage(light_image=Image.open("Images/up-arrow.png"), size=(15,15))
         self.send_button = ctk.CTkButton(self.input_frame, text="", image = self.send_icon, width = 30, command= self.send_message)
@@ -52,16 +54,9 @@ class ChatApp(ctk.CTk):
 
         self.message_queue = queue.Queue()
 
-        self.server_thread = threading.Thread(target=self.start_server)
-        self.server_thread.daemon = True
-        self.server_thread.start()
-
         self.grid_counter = 0
         
         self.update_RASA_message()
-
-    #----------------------------Отдел Функий----------------------------#
-
 
     #----------------------------Отдел Обновления сообщений----------------------------#
 
@@ -163,10 +158,8 @@ class ChatApp(ctk.CTk):
             files = {"file": ("record.wav", file_data, "audio/mpeg")}
             response = requests.post(self.text_target_url, files=files)
 
-    # Print response
             print(response.status_code)
 
-    # If the upload is successful, delete the file
             if response.status_code == 400:
                 self.update_User_message("Аудио-файл был успешно отправлен")
                 os.remove("record.wav")
@@ -176,7 +169,7 @@ class ChatApp(ctk.CTk):
     #----------------------------Отдел Отправки аудио и сообщений----------------------------#
 
     # Отправить сообщение
-    def send_message(self):
+    def send_message(self, event=None):
 
         message = self.entry_text.get()
 
@@ -190,10 +183,18 @@ class ChatApp(ctk.CTk):
         try:
             response = requests.post(self.text_target_url, json={"message":f"{message}"})
 
-            if response.status_code == 200:
-                print(f"Успешно отправлено на сервер")
+            received_data = response.json()
+            print(received_data)
+            custom_data = received_data[0].get("custom", {})
+
+            if "data" in received_data[0]["custom"] and custom_data.get("type") == "text":
+                self.message_queue.put(f"{received_data[0]['custom']['data']}")
+            else:
+                command = received_data[0]['custom']['data']
+                subprocess.run(["powershell", "-Command", command])
+                self.message_queue.put(f"Команда успешно выполнена...")
         except Exception as e:
-            self.update_chat(f"Error: {str(e)}")
+            self.update_User_message(f"Error: {str(e)}")
 
         self.entry_text.delete(0, END)
 
@@ -201,10 +202,9 @@ class ChatApp(ctk.CTk):
     def upload_file_audio(self):
         file_path = filedialog.askopenfilename(filetypes=[("Audio Files", "*.wav;*.mp3;*.m4a")])
         if not file_path:
-            self.update_chat("You: [No file selected]")
-            return
+            return ()
 
-        self.update_chat(f"You: Uploading file {os.path.basename(file_path)}...")
+        self.update_User_message(f"Загрузка файла: {os.path.basename(file_path)}...")
 
         try:
             with open(file_path, "rb") as audio_file:
@@ -212,32 +212,11 @@ class ChatApp(ctk.CTk):
                 response = requests.post(self.audio_target_url, files=files)
                 if response.status_code == 200:
                     server_response = response.json()
-                    self.update_chat(f"Server: {server_response.get('status', 'success')} - {server_response.get('text', '')}")
+                    self.update_RASA_message(f"Server: {server_response.get('status', 'success')} - {server_response.get('text', '')}")
                 else:
-                    self.update_chat(f"Server Error: {response.status_code}")
+                    self.update_RASA_message(f"Server Error: {response.status_code}")
         except Exception as e:
-            self.update_chat(f"Error: {str(e)}")
-
-#----------------------------Отдел Сервера----------------------------#
-
-# Сервер для принятия сообщения
-    def start_server(self):
-        app = Flask(__name__)
-
-        @app.route("/receive_message", methods=["POST"])
-        def receive_message():
-
-            data = request.json
-
-            if "text" in data:
-                self.message_queue.put(f"{data['text']}")
-                return jsonify({"status": "success"}), 200
-            return jsonify({"error": "Invalid data"}), 400
-    
-        app.run(port=5000)
-        
-
-# Запуск интерфейса
+            self.update_RASA_message(f"Error: {str(e)}")
 
 if __name__ == "__main__":
     app = ChatApp()
