@@ -8,6 +8,8 @@ import os
 from openai import OpenAI
 import json
 
+
+#-----------------------------------------Вопрос к ГПТ-----------------------------------------#
 class ActionAskGPT(Action):
     def name(self) -> str:
         return "action_ask_GPT"
@@ -51,6 +53,7 @@ class ActionAskGPT(Action):
         return[SlotSet("search_query")]
     
 
+#-----------------------------------------Сохранить пример-----------------------------------------#
 class АctionSaveExampleToIntent(Action):
     def name(self) -> str:
         return "action_save_example_to_intent"
@@ -85,9 +88,34 @@ class АctionSaveExampleToIntent(Action):
         
         with open(filepath, "a", encoding="utf-8") as file:
             file.write(f"\n    - {message}")
-        
-        SlotSet("last_entity_name", "")
-        
+
+        SlotSet("last_entity_name")
+
+        return []
+
+
+#-----------------------------------------Создать команду для powershell-----------------------------------------#
+class ActionCreateCommand(Action):
+    def name(self) -> str:
+        return "action_create_command"
+    
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: dict):
+
+        command = tracker.get_intent_of_latest_message()
+
+        if command == "create_folder":
+            user_command = 'mkdir "C:\\Users\\plant\\Desktop\\new_folder"'
+        elif command == "delete_folder":
+            user_command = 'Remove-Item -Path "C:\\Users\\plant\\Desktop\\new_folder" -Recurse -Force'
+        elif command == "create_file":
+            user_command = 'New-Item -Path "C:\\Users\\plant\\Desktop\\file.txt" -ItemType File -Force'
+        elif command == "delete_file":
+            user_command = 'Remove-Item -Path "C:\\Users\\plant\\Desktop\\file.txt" -Force'
+
+        dispatcher.utter_message(json_message = {"type":"bash", "data": f"{user_command}"})
+
+
+#-----------------------------------------Получить время-----------------------------------------#
 class ActionShowTime(Action):
     def name(self) -> str:
         return "action_show_time"
@@ -96,11 +124,10 @@ class ActionShowTime(Action):
 
         current_time = dt.datetime.now().strftime('%H:%M:%S')
 
-        dispatcher.utter_message(text=f"Текущее время: {current_time}")
-        SlotSet("last_entity_name", "")
+        dispatcher.utter_message(json_message = {"type":"text", "data": f"Текущее время:{current_time}"})
 
-        return []
-    
+
+#-----------------------------------------Получить погоду-----------------------------------------#
 class ActionGetWeather(Action):
     def name(self) -> str:
         return "action_get_weather"
@@ -123,9 +150,6 @@ class ActionGetWeather(Action):
             data = response.json()
             temp = data["main"]["temp"]
             description = data["weather"][0]["description"]
-            dispatcher.utter_message(text=f"В городе {lemma} сейчас {temp}°C, {description}.")
+            dispatcher.utter_message(json_message = {"type":"text", "data": f"В городе {lemma} сейчас {temp}°C, {description}."})
         else:
-            dispatcher.utter_message(text="Я не смог найти погоду для этого города. Попробуйте другой город.")
-            SlotSet("last_entity_name", "")
-            return []
-
+            dispatcher.utter_message(json_message = {"type":"text", "data": "Я не смог найти погоду для этого города. Попробуйте другой город."})
